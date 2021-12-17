@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/stockord/<int:pk>', StockOrdDetail.as_view()),
     path('api/customerord', CustomerOrd.as_view()),
     path('api/customerord/<int:pk>', CustomerOrdDetail.as_view()),
+    path('api/customerord/job/<int:pk>', OrderJobDetail.as_view()),
     path('api/account', AccountList.as_view()),
     path('api/account/<str:pk>', AccountDetail.as_view()),
     path('api/shipment', ShipmentList.as_view()),
