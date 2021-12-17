@@ -457,11 +457,18 @@ class AccountList(APIView):
                 pn = Customer.objects.filter(pk = request.data["phone_number"]).first()
         elif request.data["acctype"]=="employee":
             pn = None
-            e_id = request.data["employee_id"]
+            try:
+                e_id = request.data["employee_id"]
+            except:
+                return Response (status=status.HTTP_400_BAD_REQUEST)
+                
             if not Employee.objects.filter(pk = request.data["employee_id"]).exists():
-                newemp_id = (Employee.objects.latest('employee_id').pk)+1
-                emp_id = Employee(employee_id = newemp_id, sin = request.data["sin"], address = request.data["address"])
-                emp_id.save()
+                try:
+                    newemp_id = (Employee.objects.latest('employee_id').pk)+1
+                    emp_id = Employee(employee_id = newemp_id, sin = request.data["sin"], address = request.data["address"])
+                    emp_id.save()
+                except:
+                    return Response (status=status.HTTP_400_BAD_REQUEST)
             else:
                 emp_id = Employee.objects.filter(pk = request.data["employee_id"]).first()
         else:
