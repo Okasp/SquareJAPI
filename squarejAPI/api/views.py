@@ -21,26 +21,6 @@ class EmployeeList(APIView):
     def get(self, request, format=None):
         employees = Employee.objects.all()
         ser = EmployeeSerializer(employees, many=True)
-        a = Location(address="999 Rando street SE Calgary AB")
-        a.save()
-        b = Location(address="998 Rando street SE Calgaru AB")
-        b.save()
-        st = Store(address=a)
-        st.save()
-        wa = Warehouse(address=b, capacity = 3000)
-        wa.save()
-
-        g = Customer_Order(order_id=1, ordered_at=st, date = datetime.date(2021, 10, 19), time = datetime.time(10,33,45), total_price = 10.99, order_type = "instore")
-        g.save()
-        c = Customer(phone_number="(403)999-9999", name = "Jane Doe", address = "444 Testing Road SW Calgary AB")
-        c.save()
-        place = Places(phone_number=c, order_id = g)
-        place.save()
-        p = Product(price = 1.01, tags = "test, good, bad", upc=1234567890)
-        p.save()
-        x = Ord_Includes(order_id=g, quantity = 10, upc = p)
-        x.save()
-
         return Response (ser.data)
 
     def post(self, request, format=None):
@@ -493,7 +473,7 @@ class AccountList(APIView):
             #return Response (ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AccountDetail(APIView):
-    def get(self, pk, request, format=None):
+    def get(self,request, pk, format=None):
         acc = Account.objects.filter(pk=pk).first()
         ser = AccountSerializer(acc)
         return Response(ser.data, status=status.HTTP_200_OK)
