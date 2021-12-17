@@ -34,10 +34,9 @@ urlpatterns = [
     path('api/products/<int:pk>', ProductDetail.as_view()),
     path('api/store', StoreList.as_view()),
     path('api/store/<str:pk>', StoreDetail.as_view()),
-    path('api/store/inventory',LocationInventory.as_view()),
     path('api/warehouse', WarehouseList.as_view()),
     path('api/warehouse/<str:pk>', WarehouseDetail.as_view()),
-    path('api/warehouse/inventory', LocationInventory.as_view()),
+    path('api/inventory', LocationInventory.as_view()),
     path('api/stockord', StockOrd.as_view()),
     path('api/stockord/<int:pk>', StockOrdDetail.as_view()),
     path('api/customerord', CustomerOrd.as_view()),
@@ -47,6 +46,8 @@ urlpatterns = [
     path('api/shipment', ShipmentList.as_view()),
     path('api/shipment/<str:pk>', ShipmentDetail.as_view()),
     path('api/shipment/For_Order_ID/<str:pk>', ShipbyordID.as_view()),
+    path('api/shipment/For_Order_ID/<str:pk>', ShipbyordID.as_view()),
+    path('api/auth', Auth.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
 ]

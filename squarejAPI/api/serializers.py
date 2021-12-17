@@ -5,7 +5,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = 'username, name, acctype, address, phone_number, email'
+        fields = '__all__'
 
 class EmployeeSerializer(serializers.ModelSerializer):
 
@@ -77,7 +77,7 @@ class Has_As_InventorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Has_As_Inventory
-        fields = '__all__'
+        fields = ['address', 'upc', 'quantity']
 
 class CompletesSerializer(serializers.ModelSerializer):
 
@@ -100,7 +100,7 @@ class Ship_IncludesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ship_Includes
-        fields = '__all__'
+        fields = ['quantity', 'upc']
 
 class Responsible_ForSerializer(serializers.ModelSerializer):
 

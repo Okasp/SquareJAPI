@@ -6,8 +6,7 @@ class Account(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=100)
-    salted_pwd_hash = models.CharField(max_length=256)
-    salt = models.IntegerField()
+    salted_pwd_hash = models.BinaryField(max_length=60)
     acctype = models.CharField(max_length=20)
     email = models.EmailField()
 
@@ -53,8 +52,8 @@ class Ord_Includes(models.Model):
 
 class Belongs_to(models.Model):
     username = models.OneToOneField(Account, primary_key=True, on_delete=models.CASCADE)
-    employee_id = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
-    phone_number = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE)
+    employee_id = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE, default='')
+    phone_number = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE, default='')
 
 class Manager(models.Model):
     employee_id = models.IntegerField(primary_key=True)
@@ -92,6 +91,8 @@ class Ship_Includes(models.Model):
    quantity = models.IntegerField()
    upc = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True) 
    tracking_no = models.ForeignKey(Shipment, on_delete=models.CASCADE)
+   class Meta:
+        unique_together = ['tracking_no', 'upc']
 
 class Responsible_For(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -106,3 +107,5 @@ class Stock_Order_Includes(models.Model):
     order_id = models.ForeignKey(Stock_Order, on_delete=models.CASCADE)
     upc = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
+    class Meta:
+        unique_together = ['order_id', 'upc']
