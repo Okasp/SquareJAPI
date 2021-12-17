@@ -449,6 +449,7 @@ class AccountList(APIView):
     def post(self, request, format=None):
         if request.data["acctype"]=="customer":
             emp_id = None
+            e_id = None
             if not Customer.objects.filter(pk = request.data["phone_number"]).exists():
                 pn = Customer(phone_number = request.data["phone_number"], name = request.data["name"], address = request.data["address"])
                 pn.save()
@@ -456,22 +457,30 @@ class AccountList(APIView):
                 pn = Customer.objects.filter(pk = request.data["phone_number"]).first()
         elif request.data["acctype"]=="employee":
             pn = None
+            try:
+                e_id = request.data["employee_id"]
+            except:
+                return Response (status=status.HTTP_400_BAD_REQUEST)
+                
             if not Employee.objects.filter(pk = request.data["employee_id"]).exists():
-                newemp_id = (Employee.objects.latest('employee_id').pk)+1
-                emp_id = Employee(employee_id = newemp_id, sin = request.data["sin"], address = request.data["address"])
-                emp_id.save()
+                try:
+                    newemp_id = (Employee.objects.latest('employee_id').pk)+1
+                    emp_id = Employee(employee_id = newemp_id, sin = request.data["sin"], address = request.data["address"])
+                    emp_id.save()
+                except:
+                    return Response (status=status.HTTP_400_BAD_REQUEST)
             else:
                 emp_id = Employee.objects.filter(pk = request.data["employee_id"]).first()
         else:
             return Response (status=status.HTTP_400_BAD_REQUEST)
-
         acc = Account(username = request.data["username"],
             name = request.data["name"],
             phone_number = request.data["phone_number"],
             address = request.data["address"],
             salted_pwd_hash = bcrypt.hashpw(bytes(request.data["password"], 'utf-8'), bcrypt.gensalt()),
             acctype = request.data["acctype"],
-            email = request.data["email"])
+            email = request.data["email"],
+            employee_id = e_id)
         acc.save()
 
         #CANNOT GET THIS TO WORK WITHOUT FORIEGN KEY VIOLATIONS
@@ -479,7 +488,7 @@ class AccountList(APIView):
             #Belongs_to.objects.raw("INSERT INTO api_belongs_to (username_id, employee_id_id, phone_number_id) VALUES ('" + acc.username + "', 'null', '" + pn.phone_number + "');")
         #bel = Belongs_to2(pk = Account.objects.filter(pk = acc.username).first(), phone_number = pn)
         #bel.save()
-        return Response(AccountSerializer(acc).data, status=status.HTTP_201_CREATED)
+        return Response({"username":acc.username, "email":acc.email}, status=status.HTTP_201_CREATED)
         #else:
             #return Response (ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
