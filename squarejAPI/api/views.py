@@ -3,8 +3,10 @@ from django.db.models import deletion, manager
 from django.http import response
 from django.shortcuts import render
 from rest_framework.serializers import Serializer
+import datetime
 
 from api.apps import ApiConfig
+from api.models import *
 from .serializers import *
 from .models import *
 from rest_framework import status
@@ -15,6 +17,26 @@ class EmployeeList(APIView):
     def get(self, request, format=None):
         employees = Employee.objects.all()
         ser = EmployeeSerializer(employees, many=True)
+        a = Location(address="999 Rando street SE Calgary AB")
+        a.save()
+        b = Location(address="998 Rando street SE Calgaru AB")
+        b.save()
+        st = Store(address=a)
+        st.save()
+        wa = Warehouse(address=b, capacity = 3000)
+        wa.save()
+
+        g = Customer_Order(order_id=1, ordered_at=st, date = datetime.date(2021, 10, 19), time = datetime.time(10,33,45), total_price = 10.99, order_type = "instore")
+        g.save()
+        c = Customer(phone_number="(403)999-9999", name = "Jane Doe", address = "444 Testing Road SW Calgary AB")
+        c.save()
+        place = Places(phone_number=c, order_id = g)
+        place.save()
+        p = Product(price = 1.01, tags = "test, good, bad", upc=1234567890)
+        p.save()
+        x = Ord_Includes(order_id=g, quantity = 10, upc = p)
+        x.save()
+
         return Response (ser.data)
 
     def post(self, request, format=None):
@@ -259,18 +281,20 @@ class StockOrdDetail(APIView):
 class CustomerOrd(APIView):
     def post(self, request, format=None):
         neword_id = (Customer_Order.objects.latest('order_id').pk)+1
-        ser = Customer_Order(ordered_at=request.data["ordered_at"], date=request.data["date"], time=request.data["time"], total_price=request.data["price"], order_type=request.data["order_type"] ,order_id=neword_id)
-        if ser.is_valid():
-            ser.save()
-        else:
-            return Response (ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        #try:
+        ser = Customer_Order(ordered_at=request.data["ordered_at"], date=request.data["date"], time=request.data["time"], total_price=request.data["total_price"], order_type=request.data["order_type"] ,order_id=neword_id)
+        ser.save()
+        ser3 = Places(order_id = ser, phone_number=Customer.objects.filter(pk = request.data["ordered_by"]).first())
+        ser3.save()
+        #except:
+            #return Response (status=status.HTTP_400_BAD_REQUEST)
         for inc in request.data["includes"]:
-            ser2 = Ord_Includes(order_id = neword_id, quantity=request.data["quantity"], upc = request.data["upc"])
-            if ser2.is_valid():
+            try:
+                ser2 = Ord_Includes(order_id = ser, quantity=inc["quantity"], upc = Product.objects.filter(pk=inc["upc"]).first())
                 ser2.save()
-            else:
+            except:
                 return Response (ser2.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(ser.data, status=status.HTTP_201_CREATED)
+        return Response(Customer_OrderSerializer(ser).data, status=status.HTTP_201_CREATED)
 
 class CustomerOrdDetail(APIView):
 
@@ -281,10 +305,16 @@ class CustomerOrdDetail(APIView):
         ser = Customer_OrderSerializer(stk)
         ser2 = Ord_IncludesSerializer(inc, many=True)
 
-        newdic ={'Includes': ser2.data}
+        newdic ={'includes': ser2.data}
         newdic.update(ser.data)
 
         return Response(newdic)
+
+    def delete(self, request, pk, format=None):
+        ord = Customer_Order.objects.filter(pk=pk)
+        ord.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class AccountList(APIView):
     def post(self, request, format=None):
         ser = AccountSerializer(data=request.data)
