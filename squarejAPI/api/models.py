@@ -48,6 +48,8 @@ class Ord_Includes(models.Model):
     order_id = models.ForeignKey(Customer_Order, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     upc = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    class Meta:
+        unique_together = ['order_id', 'upc']
 
 class Belongs_to(models.Model):
     username = models.OneToOneField(Account, primary_key=True, on_delete=models.CASCADE)

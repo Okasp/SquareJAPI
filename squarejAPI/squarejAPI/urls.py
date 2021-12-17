@@ -38,6 +38,8 @@ urlpatterns = [
     path('api/warehouse', WarehouseList.as_view()),
     path('api/warehouse/<str:pk>', WarehouseDetail.as_view()),
     path('api/warehouse/inventory', LocationInventory.as_view()),
+    path('api/stockord', StockOrd.as_view()),
+    path('api/stockord/<int:pk>', StockOrdDetail.as_view()),
     path('api/customerord', CustomerOrd.as_view()),
     path('api/customerord/<int:pk>', CustomerOrdDetail.as_view()),
     path('api/account', AccountList.as_view()),

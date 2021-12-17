@@ -5,7 +5,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = '__all__'
+        fields = 'username, name, acctype, address, phone_number, email'
 
 class EmployeeSerializer(serializers.ModelSerializer):
 
@@ -16,106 +16,106 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Customer
         fields = '__all__'
 
 class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Location
         fields = '__all__'
 
 class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Store
         fields = '__all__'
 
 class Customer_OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Customer_Order
         fields = '__all__'
 
 class PlacesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Places
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Product
         fields = '__all__'
 
 class Ord_IncludesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Ord_Includes
         fields = '__all__'
 
 class Belongs_toSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Belongs_to
         fields = '__all__'
 
 class ManagerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Manager
         fields = '__all__'
 
 class WarehouseSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Warehouse
         fields = '__all__'
 
 class Has_As_InventorySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Has_As_Inventory
         fields = '__all__'
 
 class CompletesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Completes
         fields = '__all__'
 
 class Assigned_ToSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Assigned_To
         fields = '__all__'
 class ShipmentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Shipment
         fields = '__all__'
 
 class Ship_IncludesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Ship_Includes
         fields = '__all__'
 
 class Responsible_ForSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Responsible_For
         fields = '__all__'
 
 class Stock_OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Stock_Order
         fields = '__all__'
 
 class Stock_Order_IncludesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee
+        model = Stock_Order_Includes
         fields = '__all__'
