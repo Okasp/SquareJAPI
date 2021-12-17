@@ -9,6 +9,7 @@ class Account(models.Model):
     salted_pwd_hash = models.BinaryField(max_length=60)
     acctype = models.CharField(max_length=20)
     email = models.EmailField()
+    employee_id = models.IntegerField(null=True, blank=True, default=None)
 
 class Employee(models.Model):
     employee_id = models.IntegerField(primary_key=True)
